@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>From Chaos to Workflow</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Questrial&display=swap">
+<style>
+html{color-scheme:light}
+/* Layout: one calm scrolling page, one section per teaser slide, white Notion-like ground, teal used sparingly */
+:root{
+  --bg:#ffffff; --fg:#111111; --mute:#6b6b66; --line:#dcd9d0;
+  --teal:#2e6f6a; --mint:#cfe6e0; --sky:#d9e4ea; --warm:#f3efe8; --board:#f1f1f3; --card:#ffffff; --bar:#e4e2dc;
+  --font:'Century Gothic','Questrial','Poppins',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#171a1a; --fg:#eeece6; --mute:#a3a39c; --line:#33393a;
+  --teal:#7fc2ba; --mint:#27403d; --sky:#26343b; --warm:#232624; --board:#1f2324; --card:#1c2020; --bar:#33393a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#171a1a; --fg:#eeece6; --mute:#a3a39c; --line:#33393a;
+  --teal:#7fc2ba; --mint:#27403d; --sky:#26343b; --warm:#232624; --board:#1f2324; --card:#1c2020; --bar:#33393a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:clamp(18px,0.9vw + 8px,26px);line-height:1.5;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1400px;margin:0 auto}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+header.top{min-height:70px}header.top b{font-size:16px}
+nav{display:flex;gap:8px}
+nav a{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:6px 14px}
+nav a:hover,nav a:focus-visible{color:var(--fg);border-color:var(--fg);outline:none}
+section{min-height:calc(100vh - 70px);min-height:calc(100svh - 70px);min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-block:72px;border-bottom:1px solid var(--line);scroll-margin-top:0}
+section:last-of-type{border-bottom:0}
+h1,h2{margin:0;line-height:1.02;font-weight:700;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:clamp(44px,6.4vw,118px)}
+h2{font-size:clamp(32px,4.4vw,80px)}
+p{margin:0}
+.sub{color:var(--mute);font-size:clamp(18px,1.6vw,30px)}
+.accent{color:var(--teal);font-weight:700}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,96px);align-items:center}
+.split>*{min-width:0}
+@media(max-width:760px){.split{grid-template-columns:1fr;gap:32px}section{padding-block:48px}}
+@media(min-width:761px){html{scroll-snap-type:y proximity}section{scroll-snap-align:start}}
+.img{width:100%;height:auto;display:block}
+.credit{font-size:12px;color:var(--mute);text-align:right;margin-top:8px}
+.btn{zoom:1.15;display:inline-flex;align-items:center;gap:14px;background:var(--fg);color:var(--bg);border-radius:99px;padding:14px 14px 14px 28px;font-size:13px;font-weight:700;letter-spacing:.06em;text-decoration:none;text-transform:uppercase}
+.btn i{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--mint);color:var(--fg);font-style:normal;font-size:16px}
+.btn:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+.meta{margin-top:20px;font-size:15px}
+.toggle{width:100%;text-align:left;font:inherit;color:inherit;background:var(--warm);border:0;border-radius:14px;padding:20px 22px;cursor:pointer;display:flex;gap:14px;align-items:flex-start}
+.toggle:focus-visible{outline:2px solid var(--teal)}
+.toggle .tri{transition:transform .2s;display:inline-block;margin-top:5px;font-size:12px}
+.toggle[aria-expanded="true"] .tri{transform:rotate(90deg)}
+.toggle small{display:block;color:var(--mute);font-size:15px;margin-top:4px}
+.shot{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff}
+.shot img{border-radius:6px}
+.board{background:var(--board);border-radius:20px;padding:clamp(20px,4vw,40px)}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:32px}
+@media(max-width:760px){.cols{grid-template-columns:1fr}}
+.col{background:color-mix(in srgb,var(--fg) 6%,var(--board));border-radius:14px;padding:18px}
+.col h3{margin:0 0 14px;font-size:15px;letter-spacing:.08em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+.tag{font-size:11px;letter-spacing:.08em;padding:3px 10px;border-radius:99px;background:var(--mint);color:var(--fg)}
+.tag.sky{background:var(--sky)}
+.q{background:var(--card);border-radius:12px;min-height:120px;display:grid;place-items:center;font-size:44px;font-weight:700;color:var(--mute);opacity:.6}
+.note{font-size:14px;font-weight:700;color:var(--teal);text-align:right;margin-top:18px}
+.rows{list-style:none;margin:36px 0 0;padding:0;display:grid;gap:22px}
+.rows li{display:flex;gap:18px;align-items:flex-start;font-size:clamp(18px,1.9vw,34px)}
+.chk{flex:none;width:1.4em;height:1.4em;border:2px solid var(--fg);border-radius:8px;display:grid;place-items:center;margin-top:3px;font-size:16px}
+.callout{margin-top:40px;background:var(--warm);border-radius:16px;padding:22px 26px;font-weight:700}
+.tools{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;padding:0;list-style:none}
+.tools li{border:1px solid var(--line);border-radius:99px;padding:6px 16px;font-size:15px}
+.panel{border:1px solid var(--line);border-radius:18px;padding:clamp(20px,4vw,64px);background:var(--card);max-width:1000px;margin:0 auto}
+.bar{height:12px;border-radius:99px;background:var(--bar)}
+.check{display:flex;align-items:flex-start;gap:18px;padding-block:14px;border-top:1px solid var(--line)}
+.check .lab{font-size:13px;font-weight:700;letter-spacing:.1em;color:var(--teal);width:64px;flex:none;padding-top:5px}
+.check .body{flex:1;min-width:0;display:grid;gap:8px;padding-top:6px}
+.check button.chk{background:none;cursor:pointer;color:var(--fg);font-family:inherit}
+.check button.chk[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:var(--bg)}
+.prog{display:flex;justify-content:space-between;font-size:14px;margin:26px 0 10px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px}
+@media(max-width:760px){.three{grid-template-columns:1fr}}
+.three .col .name{background:var(--card);border-radius:12px;padding:18px;font-size:22px;font-weight:700;display:grid;gap:12px}
+.learned{margin-top:24px;border:1px solid var(--line);border-radius:16px;padding:20px 24px;background:var(--card)}
+.learned small{display:block;color:var(--teal);font-weight:700;letter-spacing:.14em;font-size:12px;margin-bottom:6px}
+.stack{display:grid;gap:10px}
+.stack .step{background:var(--card);border-radius:10px;padding:14px 16px;font-size:16px;font-weight:700}
+.stack .step.ph{display:grid;gap:8px}
+.cal{display:grid;grid-template-columns:1fr minmax(260px,24%);gap:36px;margin-top:36px;align-items:start}
+@media(max-width:760px){.cal{grid-template-columns:1fr}}
+.slots{display:grid;gap:8px}
+.slot{display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:center}
+.slot span{font-size:13px;font-weight:700;color:var(--mute);font-variant-numeric:tabular-nums}
+.slot div{border-radius:12px;padding:10px 16px;font-weight:700;font-size:16px;background:var(--warm)}
+.slot.a div{background:var(--mint)}.slot.b div{background:var(--sky)}
+.event{border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--card)}
+.event small{font-size:12px;letter-spacing:.12em;color:var(--mute);font-weight:700}
+.event p{font-size:17px;margin-top:8px;font-weight:700}
+.event p+p{font-weight:400;color:var(--mute);font-size:15px;margin-top:2px}
+.when{border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:14px;padding:20px 24px;background:var(--card)}
+.when small{font-size:12px;letter-spacing:.12em;color:var(--mute);font-weight:700}
+.when p{font-weight:700;margin-top:8px;font-size:17px}
+.pill{margin-top:36px;background:var(--mint);border-radius:99px;padding:16px 28px;font-weight:700;font-size:clamp(15px,2vw,18px)}
+footer{padding-block:32px 40px;color:var(--mute);font-size:13px}
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:no-preference){
+  header.top{animation:up .6s both}
+  #top .split>div:first-child>*{animation:up .8s both cubic-bezier(.2,.7,.2,1)}
+  #top .split>div:first-child>*:nth-child(1){animation-delay:.1s}
+  #top .split>div:first-child>*:nth-child(2){animation-delay:.25s}
+  #top .split>div:first-child>*:nth-child(3){animation-delay:.4s}
+  #top .split>div:first-child>*:nth-child(4){animation-delay:.55s}
+  #top .split>div:last-child{animation:pop 1s .3s both cubic-bezier(.2,.7,.2,1)}
+  section.rv{opacity:0;transform:translateY(28px)}
+  section{transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+}
+@media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js"></script>
+<script type="text/babel">
+const {useState} = React;
+// Paste your Notion form links between the quotes. Empty means the button stays hidden.
+const SIGNUP_URL = 'https://app.notion.com/p/637f6e0d9b4d442ab48234c61d8183d5?pvs=106';
+const ATTEND_URL = '';
+
+const TOOLS = ['Notion','Trello','Spreo','Obsidian','Miro','FamilyWall','Snappify','Genially','Filmora'];
+const PLAN = [
+  ['0–3','Welcome',''],['3–8','My story',''],['8–14','Checks for choosing a tool','b'],
+  ['14–22','Tools and a live demo','b'],['22–37','Your turn: build a mini workflow','a'],['37–45','Takeaways and questions','']
+];
+
+function Bars({w=[100,70]}){return <div style={{display:'grid',gap:8}}>{w.map((x,i)=><div key={i} className="bar" style={{width:x+'%'}}/>)}</div>}
+
+function Cover(){return(
+  <section id="top"><div className="split">
+    <div>
+      <h1>From Chaos<br/>to Workflow</h1>
+      <p className="sub" style={{marginTop:22}}>Choosing Productivity Tools in Practice</p>
+      <p className="meta">Wed 16 Dec 2026 · 13:50–14:35 · Online · No prerequisites</p>
+      <p style={{marginTop:34}}><a className="btn" href="#story">See what’s inside <i aria-hidden="true">↘</i></a></p>
+    </div>
+    <div>
+      <img className="img" src="https://i.imgur.com/OfF5mPw.jpeg" alt="Paper-craft illustration in teal, grey and cream: a tangle of cord, crumpled paper and a scribbled notebook on the left turns into one winding path leading to a clean notebook and a flowchart on the right"/>
+      <p className="credit">Illustration: AI-generated</p>
+    </div>
+  </div></section>)}
+
+function Story(){
+  const [open,setOpen]=useState(false);
+  return(
+  <section id="story"><div className="split">
+    <div>
+      <h2>Any tool.<br/>Which one?</h2>
+      <p className="accent" style={{marginTop:22,fontSize:'1em'}}>Notes in many places. Tabs everywhere.</p>
+      <p style={{marginTop:14,fontSize:'1em',maxWidth:'40ch'}}>During a coding course, I was building a web app. My trainer asked for daily updates, in any tool.</p>
+      <div style={{marginTop:26}}>
+        <button className="toggle" aria-expanded={open} onClick={()=>setOpen(!open)}>
+          <span className="tri" aria-hidden="true">▶</span>
+          <span><b>Why did I build it this way?</b>
+            <small>{open?'The answer is in the workshop.':'Tap to open.'}</small></span>
+        </button>
+      </div>
+    </div>
+    <div className="shot"><img className="img" src="https://i.imgur.com/fDI7zfs.png" alt="Page from my Notion Daily Learning Log, dated April 28, 2025, with the headings What I Learned, Challenges Faced and References"/></div>
+  </div></section>)}
+
+function Teaser(){return(
+  <section id="stay"><div className="board">
+    <h2>Sometimes the best tool is the one you already have.</h2>
+    <p className="sub" style={{marginTop:16}}>Let’s explore when to stay, and when to switch.</p>
+    <div className="cols">
+      {['STAY','CHECK','SWITCH'].map((l,i)=>
+        <div className="col" key={l}><h3>{l}<span className={'tag'+(i==1?' sky':'')}>0{i+1}</span></h3><div className="q" aria-label="Revealed in the workshop">?</div></div>)}
+    </div>
+    <p className="note">More in the workshop.</p>
+  </div></section>)}
+
+function Three(){return(
+  <section id="do">
+    <h2>Three things you’ll do.</h2>
+    <ul className="rows">
+      {['Meet tools from my own toolbox, and why I chose them.','Learn simple checks that make choosing a tool easy.','Build a mini workflow together, and learn to build your own.'].map(t=>
+        <li key={t}><span className="chk" aria-hidden="true">✓</span><span>{t}</span></li>)}
+    </ul>
+    <p className="callout">For DDP: every team project needs a workflow. It is a future skill.</p>
+  </section>)}
+
+function Toolbox(){return(
+  <section id="toolbox"><div className="split">
+    <div>
+      <h2>Meet my<br/>toolbox.</h2>
+      <p className="sub" style={{marginTop:22,maxWidth:'26ch'}}>Tools I use for different tasks. What is each one for?</p>
+      <p className="accent" style={{marginTop:20,fontSize:'1em'}}>How many of them do you already know?</p>
+      <ul className="tools" aria-label="Tools in my toolbox">{TOOLS.map(t=><li key={t}>{t}</li>)}</ul>
+    </div>
+    <div>
+      <img className="img" src="https://i.imgur.com/YyAtenA.png" alt="A laptop screen showing a launcher with nine tool tiles: Notion, Trello, Spreo, Obsidian, Miro, FamilyWall, Snappify, Genially and Filmora"/>
+      <p className="credit">Illustration: AI-assisted</p>
+    </div>
+  </div></section>)}
+
+function Choose(){
+  const [on,setOn]=useState(false);
+  return(
+  <section id="choose">
+    <div className="panel">
+      <h2 style={{fontSize:'clamp(30px,4.6vw,44px)'}}>How I choose a tool.</h2>
+      <p className="sub" style={{marginTop:12,fontSize:'1em'}}>Checks before I commit to a tool.</p>
+      <div className="prog"><b>Checklist</b><span style={{color:'var(--mute)'}}>{on?'1':'0'} / ?</span></div>
+      <div className="bar" style={{marginBottom:18,overflow:'hidden'}}><div style={{height:'100%',width:on?'12%':'0%',background:'var(--teal)',transition:'width .3s'}}/></div>
+      <div className="check">
+        <button className="chk" aria-pressed={on} aria-label="Mark check as done" onClick={()=>setOn(!on)}>{on?'✓':''}</button>
+        <span className="lab">FREE</span><div className="body" style={{paddingTop:0,fontSize:'1.1em'}}>Does the free plan cover it?</div>
+      </div>
+      {[[100,60],[100,48],[100,54]].map((w,i)=>
+        <div className="check" key={i}><span className="chk" style={{opacity:.35}} aria-hidden="true"/><span className="lab"><span className="bar" style={{display:'block',width:'100%',marginTop:6}}/></span>
+          <div className="body"><div className="bar" style={{width:[78,58,68][i]+'%'}}/></div></div>)}
+    </div>
+  </section>)}
+
+function ThreeTools(){return(
+  <section id="three">
+    <h2>From chaos to workflow, in three tools.</h2>
+    <p className="sub" style={{marginTop:14}}>Sketch in Miro, plan in Trello, track in Notion.</p>
+    <div className="three">
+      {[['SKETCH','Miro'],['PLAN','Trello'],['TRACK','Notion']].map(([a,b])=>
+        <div className="col" key={a} style={{background:'var(--board)'}}>
+          <h3 style={{color:'var(--teal)'}}>{a}</h3>
+          <div className="name" style={{background:'var(--card)',borderRadius:12,padding:18,fontSize:22,fontWeight:700,display:'grid',gap:12}}>{b}<div className="bar" style={{width:'55%'}}/></div>
+        </div>)}
+    </div>
+    <div className="learned"><small>WHAT I LEARNED</small><b>No tool is perfect. And the one I love might not work for you. Why? More in the workshop.</b></div>
+  </section>)}
+
+function Activity(){return(
+  <section id="activity">
+    <div style={{display:'flex',justifyContent:'space-between',gap:16,flexWrap:'wrap',alignItems:'flex-start'}}>
+      <h2>Pick a messy task.</h2>
+      <div style={{display:'flex',gap:8}}><span className="tag">15 MIN</span><span className="tag sky">EXAMPLE</span></div>
+    </div>
+    <p style={{marginTop:22,fontWeight:700,fontSize:'1.1em'}}>Break it into steps. Find a tool for each. Vote anonymously.</p>
+    <div className="cols">
+      <div className="col" style={{background:'var(--warm)'}}><h3>1 · Task</h3><div className="stack"><div className="step">One messy task</div></div></div>
+      <div className="col" style={{background:'var(--warm)'}}><h3>2 · Steps</h3><div className="stack">{[[100,70],[80,55],[90,40]].map((w,i)=><div className="step ph" key={i}><Bars w={w}/></div>)}</div></div>
+      <div className="col" style={{background:'var(--warm)'}}><h3>3 · Tools + vote</h3><div className="stack">{[[70],[85],[60]].map((w,i)=><div className="step ph" key={i}><Bars w={w}/></div>)}</div></div>
+    </div>
+    <p className="sub" style={{marginTop:22,fontSize:'0.95em'}}>The result: a mini workflow.</p>
+  </section>)}
+
+function Minutes(){return(
+  <section id="when">
+    <h2>45 minutes.</h2>
+    <div className="cal">
+      <div className="slots">{PLAN.map(([t,l,c])=><div key={t} className={'slot '+c}><span>{t}</span><div>{l}</div></div>)}</div>
+      <div className="event"><small>EVENT</small><p>Wed 16 Dec 2026</p><p style={{color:'var(--fg)',fontWeight:400}}>13:50–14:35</p><p>Online · 45 min</p></div>
+    </div>
+  </section>)}
+
+function Bring(){
+  const [a,setA]=useState(false),[b,setB]=useState(false);
+  const Item=({v,s,t})=><li><button className="chk" style={{background:v?'var(--teal)':'none',borderColor:v?'var(--teal)':'var(--fg)',color:'var(--bg)',cursor:'pointer',fontFamily:'inherit'}} aria-pressed={v} aria-label={t} onClick={()=>s(!v)}>{v?'✓':''}</button><span>{t}</span></li>;
+  return(
+  <section id="bring">
+    <h2>Bring one task you<br/>want to make easier.</h2>
+    <p className="accent" style={{marginTop:20,fontSize:'1em'}}>No coding or previous tool experience required.</p>
+    <div className="split" style={{marginTop:32,alignItems:'start'}}>
+      <div><small style={{fontSize:13,letterSpacing:'.14em',color:'var(--mute)',fontWeight:700}}>BRING</small>
+        <ul className="rows" style={{marginTop:16,gap:16}}>
+          <Item v={a} s={setA} t="A laptop with a stable connection"/>
+          <Item v={b} s={setB} t="One real task"/>
+        </ul></div>
+      <div className="when"><small>WHEN AND WHERE</small><p>Wed 16 Dec 2026 · 13:50–14:35</p><p>Online · 45 min</p></div>
+    </div>
+    <p className="pill">Leave with a mini workflow, and a way to build your own.</p>
+  </section>)}
+
+function Signup(){return(
+  <section id="signup">
+    <h2>How to sign up.</h2>
+    <p className="sub" style={{marginTop:14}}>Three steps, about one minute.</p>
+    <ol className="rows" style={{listStyle:'none',margin:'36px 0 0',paddingLeft:0}}>
+      {[['Open the class sign-up sheet.','You find it in the class Teams chat.'],
+        ['Add your name.','Find the row “Bhety · From Chaos To Workflow”, Wed 16.12.2026, and write your name in the column “Who wants to join?”. If you prefer not to appear in the sheet, sign up with the form below instead.'],
+        ['Bring one real task.','The online link and a reminder will be shared in the chat before the workshop.']].map(([a,b],i)=>
+        <li key={a}><span className="chk" aria-hidden="true" style={{fontSize:'0.85em',fontWeight:700}}>{i+1}</span><span><b>{a}</b><br/><span style={{color:'var(--mute)',fontSize:'0.8em'}}>{b}</span></span></li>)}
+    </ol>
+    {SIGNUP_URL && <p style={{marginTop:32}}><a className="btn" href={SIGNUP_URL} target="_blank" rel="noopener">Sign up with the form <i aria-hidden="true">↗</i></a></p>}
+    <p className="pill">Questions? Ask me in the chat.</p>
+  </section>)}
+
+function Attend(){return(
+  <section id="attend">
+    <h2>Check in on the day.</h2>
+    <p className="sub" style={{marginTop:14,maxWidth:'40ch'}}>Wed 16 Dec 2026, 13:50–14:35. Add your name so I know who joined.</p>
+    {ATTEND_URL
+      ? <p style={{marginTop:32}}><a className="btn" href={ATTEND_URL} target="_blank" rel="noopener">Check in <i aria-hidden="true">↗</i></a></p>
+      : <p className="pill" style={{marginTop:32}}>The check-in link opens on the day of the workshop.</p>}
+    <p style={{marginTop:22,color:'var(--mute)',fontSize:'0.85em',maxWidth:'44ch'}}>Prefer not to use the form? Type your name in the chat instead.</p>
+  </section>)}
+
+function App(){
+  React.useEffect(()=>{
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window))return;
+    const secs=[...document.querySelectorAll('section:not(#top)')];
+    secs.forEach(x=>x.classList.add('rv'));
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('rv');io.unobserve(e.target)}}),{threshold:.12});
+    secs.forEach(x=>io.observe(x));
+    const t=setTimeout(()=>secs.forEach(x=>x.classList.remove('rv')),6000);
+    return()=>{io.disconnect();clearTimeout(t)};
+  },[]);
+  return(
+  <div className="wrap">
+    <header className="top"><b>Bhety</b>
+      <nav aria-label="Sections"><a href="#story">Why</a><a href="#toolbox">How</a><a href="#when">When</a><a href="#signup">Sign up</a><a href="#attend">Check in</a></nav></header>
+    <Cover/><Story/><Teaser/><Three/><Toolbox/><Choose/><ThreeTools/><Activity/><Minutes/><Bring/><Signup/><Attend/>
+    <footer>© 2026 Bhety. All rights reserved. · From Chaos to Workflow · Peer workshop, Design of Digital Products, FH Hagenberg</footer>
+  </div>)}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
